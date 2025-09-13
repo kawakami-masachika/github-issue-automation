@@ -1,4 +1,4 @@
-export interface IssueData {
+export type  IssueData = {
   title: string;
   labels?: string[];
   overview?: string;
@@ -10,7 +10,7 @@ export interface IssueData {
   outOfScope?: string;
 }
 
-export interface CSVRow {
+export type  CSVRow = {
   title: string;
   labels?: string;
   overview?: string;
@@ -22,7 +22,7 @@ export interface CSVRow {
   outOfScope?: string;
 }
 
-export interface GitHubLabel {
+export type  GitHubLabel = {
   id: number;
   name: string;
   color: string;

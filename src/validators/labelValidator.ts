@@ -35,7 +35,7 @@ export class LabelValidator {
   }
 }
 
-export interface ValidationResult {
+export type  ValidationResult = {
   isValid: boolean;
   validLabels: string[];
   invalidLabels: string[];

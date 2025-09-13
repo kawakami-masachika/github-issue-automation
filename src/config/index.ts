@@ -3,7 +3,7 @@ import * as path from 'path';
 
 dotenv.config();
 
-export interface Config {
+export type  Config = {
   googleSheetId: string;
   googleCredentialsPath: string;
   githubToken: string;
