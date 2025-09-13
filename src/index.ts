@@ -15,9 +15,9 @@ async function main(): Promise<void> {
     // サービスの初期化
     const googleSheetsService = new GoogleSheetsService(config.googleCredentialsPath);
     const githubService = new GitHubService(
-      config.githubToken,
       config.githubRepoOwner,
-      config.githubRepoName
+      config.githubRepoName,
+      config.githubToken
     );
     console.log('✅ サービスを初期化しました');
 

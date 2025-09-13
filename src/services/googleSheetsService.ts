@@ -13,7 +13,6 @@ export class GoogleSheetsService {
 
   private async initializeAuth(): Promise<void> {
     const credentials = JSON.parse(fs.readFileSync(this.credentialsPath, 'utf8'));
-    
     this.auth = new google.auth.GoogleAuth({
       credentials,
       scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],

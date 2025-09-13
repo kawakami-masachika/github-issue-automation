@@ -8,17 +8,23 @@
     "start": "tsx src/index.ts",
     "dev": "tsx watch src/index.ts"
   },
-  "keywords": ["github", "automation", "typescript", "google-sheets"],
+  "keywords": [
+    "github",
+    "automation",
+    "typescript",
+    "google-sheets"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "typescript": "^5.0.0",
-    "tsx": "^4.0.0"
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
   },
   "dependencies": {
-    "googleapis": "^126.0.0",
+    "@google/gemini-cli": "^0.4.1",
     "csv-parser": "^3.0.0",
-    "dotenv": "^16.0.0"
+    "dotenv": "^16.0.0",
+    "googleapis": "^126.0.0"
   }
 }

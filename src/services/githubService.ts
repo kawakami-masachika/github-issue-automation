@@ -6,16 +6,20 @@ const execAsync = promisify(exec);
 
 export class GitHubService {
   constructor(
-    private token: string,
     private owner: string,
-    private repo: string
+    private repo: string,
+    private token?: string
   ) {}
 
   private async runGhCommand(command: string): Promise<string> {
     try {
-      const { stdout } = await execAsync(`gh ${command}`, {
-        env: { ...process.env, GITHUB_TOKEN: this.token }
-      });
+      // GitHub CLIの認証を使用（トークンが提供されている場合は環境変数として設定）
+      const env = { ...process.env };
+      if (this.token) {
+        env.GITHUB_TOKEN = this.token;
+      }
+
+      const { stdout } = await execAsync(`gh ${command}`, { env });
       return stdout.trim();
     } catch (error) {
       console.error(`Error running gh command: ${command}`, error);
@@ -38,9 +42,8 @@ export class GitHubService {
   async createIssue(issueData: IssueData): Promise<string> {
     try {
       const body = this.generateIssueBody(issueData);
-      
       let command = `issue create --repo ${this.owner}/${this.repo} --title "${issueData.title}" --body "${body}"`;
-      
+
       if (issueData.labels && issueData.labels.length > 0) {
         const labelsStr = issueData.labels.join(',');
         command += ` --label "${labelsStr}"`;

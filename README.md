@@ -9,6 +9,12 @@ Google Sheetsから定義されたデータを読み込んで、GitHub Issuesを
 - ラベルの存在チェック・バリデーション
 - ISSUE_TEMPLATEに基づいたissue本文の自動生成
 
+## 前提条件
+
+- Node.js 16以上
+- yarn
+- **GitHub CLI (`gh`) の事前認証が必要**
+
 ## 必要な準備
 
 ### 1. 依存関係のインストール
@@ -17,22 +23,33 @@ Google Sheetsから定義されたデータを読み込んで、GitHub Issuesを
 yarn install
 ```
 
-### 2. GitHub CLIのインストールと認証
+### 2. GitHub CLIのインストールと認証 ⚠️ **必須**
+
+このツールを使用する前に、GitHub CLIでの認証が必要です。
 
 ```bash
 # GitHub CLIのインストール (macOS)
 brew install gh
 
-# GitHub認証
+# GitHub認証（必須）
 gh auth login
 ```
 
-### 3. Google Cloud Serviceアカウントの設定
+認証状態の確認：
+```bash
+gh auth status
+```
+
+> **重要**: `gh auth login`による事前認証が完了していない場合、ツールは正常に動作しません。認証が完了すると、`GITHUB_TOKEN`環境変数の設定は不要になります。
+
+### 3. Google Sheets APIの設定
 
 1. [Google Cloud Console](https://console.cloud.google.com/) でプロジェクトを作成
 2. Google Sheets APIを有効化
-3. サービスアカウントを作成してJSONキーファイルをダウンロード
-4. 対象のGoogle Sheetsでサービスアカウントのメールアドレスに編集権限を付与
+3. サービスアカウントを作成
+4. 対象のGoogle Sheetsでサービスアカウントのメールアドレスに閲覧権限を付与
+
+詳細な認証設定については、[Google Sheets認証ガイド](./docs/google-sheets-auth.md)を参照してください。
 
 ### 4. 環境変数の設定
 
@@ -42,12 +59,31 @@ gh auth login
 cp .env.example .env
 ```
 
+#### 基本設定
 ```env
 GOOGLE_SHEET_ID=your_google_sheet_id
-GOOGLE_CREDENTIALS_PATH=path/to/credentials.json
-GITHUB_TOKEN=your_github_token
+# GITHUB_TOKEN=your_github_token  # オプション: gh auth loginで認証済みの場合は不要
 GITHUB_REPO_OWNER=your_github_username
 GITHUB_REPO_NAME=your_repository_name
+```
+
+#### Google認証設定（以下のいずれかを選択）
+
+**方法1: 環境変数でのサービスアカウント認証（推奨）**
+```env
+GOOGLE_SERVICE_ACCOUNT_EMAIL=your-service-account@project-id.iam.gserviceaccount.com
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY\n-----END PRIVATE KEY-----\n"
+```
+
+**方法2: サービスアカウントキーファイル**
+```env
+GOOGLE_CREDENTIALS_PATH=path/to/credentials.json
+```
+
+**方法3: Base64エンコードされたキー**
+```env
+GOOGLE_SERVICE_ACCOUNT_KEY=base64_encoded_service_account_key
+```
 ```
 
 ## Google Sheetsの形式
@@ -93,24 +129,37 @@ yarn build
 
 ## 注意事項
 
+- **事前にGitHub CLIでの認証が必要です**: `gh auth login`を実行してください
 - GitHub API制限を考慮し、各issue作成間に1秒の待機時間を設けています
 - 無効なラベルが指定された場合、警告を表示して有効なラベルのみを使用します
 - Titleが空の行はスキップされます
+- 対象リポジトリへの書き込み権限が必要です
+
+```
+
+## トラブルシューティング
+
+### GitHub認証エラー
+
+以下のコマンドで認証状態を確認してください：
+
+```bash
+gh auth status
+```
+
+認証されていない場合は、再度認証を実行：
+
+```bash
+gh auth login
+```
+
+### よくあるエラー
+
+- **`gh: command not found`**: GitHub CLIがインストールされていません
+- **`authentication required`**: `gh auth login`を実行してください
+- **`repository not found`**: リポジトリ名やオーナー名を確認してください
+- **`permission denied`**: 対象リポジトリへの書き込み権限がありません
+
+詳細な認証設定については、[認証ガイド](./docs/authentication.md)を参照してください。
 
 ## プロジェクト構造
-
-```
-src/
-├── index.ts                    # エントリーポイント
-├── types/
-│   └── index.ts               # 型定義
-├── services/
-│   ├── googleSheetsService.ts # Google Sheets API
-│   └── githubService.ts       # GitHub CLI操作
-├── validators/
-│   └── labelValidator.ts      # ラベル検証
-├── config/
-│   └── index.ts              # 設定管理
-└── utils/
-    └── index.ts              # ユーティリティ関数
-```
