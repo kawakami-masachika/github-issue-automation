@@ -17,18 +17,23 @@ async function main(): Promise<void> {
     const githubService = new GitHubService(
       config.githubRepoOwner,
       config.githubRepoName,
-      config.githubToken
+      config.githubToken,
     );
     console.log('✅ サービスを初期化しました');
 
     // Google Sheetsの権限チェック
     console.log('🔐 Google Sheetsアクセス権限をチェック中...');
-    const hasPermission = await googleSheetsService.checkPermissions(config.googleSheetId);
+    const hasPermission = await googleSheetsService.checkPermissions(
+      config.googleSheetId,
+    );
 
     if (!hasPermission) {
       console.error('\n❌ Google Sheetsへのアクセス権限がありません。');
       console.error('以下の手順で権限を設定してください:\n');
-      console.error('1. Google Sheetsを開く: https://docs.google.com/spreadsheets/d/' + config.googleSheetId);
+      console.error(
+        '1. Google Sheetsを開く: https://docs.google.com/spreadsheets/d/' +
+          config.googleSheetId,
+      );
       console.error('2. 右上の「共有」ボタンをクリック');
       console.error('3. サービスアカウントのメールアドレスを追加');
       console.error('4. 権限を「閲覧者」に設定\n');
@@ -37,7 +42,10 @@ async function main(): Promise<void> {
 
     // Google Sheetsからデータを取得
     console.log('📊 Google Sheetsからデータを取得中...');
-    const csvData = await googleSheetsService.fetchData(config.googleSheetId, config.sheetRange);
+    const csvData = await googleSheetsService.fetchData(
+      config.googleSheetId,
+      config.sheetRange,
+    );
 
     if (csvData.length === 0) {
       console.log('⚠️  処理するデータがありません');
@@ -67,11 +75,17 @@ async function main(): Promise<void> {
 
         // ラベルの検証
         if (issueData.labels && issueData.labels.length > 0) {
-          const labelValidation = labelValidator.validateLabels(issueData.labels);
+          const labelValidation = labelValidator.validateLabels(
+            issueData.labels,
+          );
 
           if (!labelValidation.isValid) {
-            console.warn(`⚠️  行 ${rowNumber}: 無効なラベルが見つかりました: ${labelValidation.invalidLabels.join(', ')}`);
-            console.warn(`   有効なラベル: ${labelValidation.validLabels.join(', ')}`);
+            console.warn(
+              `⚠️  行 ${rowNumber}: 無効なラベルが見つかりました: ${labelValidation.invalidLabels.join(', ')}`,
+            );
+            console.warn(
+              `   有効なラベル: ${labelValidation.validLabels.join(', ')}`,
+            );
             // 有効なラベルのみを使用
             issueData.labels = labelValidation.validLabels;
           }
@@ -86,7 +100,6 @@ async function main(): Promise<void> {
         if (i < csvData.length - 1) {
           await sleep(1000);
         }
-
       } catch (error) {
         console.error(`❌ 行 ${rowNumber}: Issue作成エラー -`, error);
         errorCount++;
@@ -106,7 +119,6 @@ async function main(): Promise<void> {
     } else {
       console.log('❌ すべてのIssue作成に失敗しました');
     }
-
   } catch (error) {
     console.error('💥 アプリケーションエラー:', error);
     process.exit(1);

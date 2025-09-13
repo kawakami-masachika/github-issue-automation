@@ -36,6 +36,7 @@ gh auth login
 ```
 
 認証状態の確認：
+
 ```bash
 gh auth status
 ```
@@ -60,6 +61,7 @@ cp .env.example .env
 ```
 
 #### 基本設定
+
 ```env
 GOOGLE_SHEET_ID=your_google_sheet_id
 # GITHUB_TOKEN=your_github_token  # オプション: gh auth loginで認証済みの場合は不要
@@ -70,21 +72,25 @@ GITHUB_REPO_NAME=your_repository_name
 #### Google認証設定（以下のいずれかを選択）
 
 **方法1: 環境変数でのサービスアカウント認証（推奨）**
+
 ```env
 GOOGLE_SERVICE_ACCOUNT_EMAIL=your-service-account@project-id.iam.gserviceaccount.com
 GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY\n-----END PRIVATE KEY-----\n"
 ```
 
 **方法2: サービスアカウントキーファイル**
+
 ```env
 GOOGLE_CREDENTIALS_PATH=path/to/credentials.json
 ```
 
 **方法3: Base64エンコードされたキー**
+
 ```env
 GOOGLE_SERVICE_ACCOUNT_KEY=base64_encoded_service_account_key
 ```
-```
+
+````
 
 ## Google Sheetsの形式
 
@@ -113,7 +119,7 @@ GOOGLE_SERVICE_ACCOUNT_KEY=base64_encoded_service_account_key
 
 ```bash
 yarn dev
-```
+````
 
 ### 本番実行
 
@@ -144,7 +150,7 @@ yarn troubleshoot
 - Titleが空の行はスキップされます
 - 対象リポジトリへの書き込み権限が必要です
 
-```
+````
 
 ## トラブルシューティング
 
@@ -162,7 +168,7 @@ yarn troubleshoot
 **確認コマンド**:
 ```bash
 yarn troubleshoot
-```
+````
 
 ### GitHub認証エラー
 

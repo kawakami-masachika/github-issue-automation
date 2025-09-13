@@ -8,7 +8,7 @@ export class GitHubService {
   constructor(
     private owner: string,
     private repo: string,
-    private token?: string
+    private token?: string,
   ) {}
 
   private async runGhCommand(command: string): Promise<string> {
@@ -30,7 +30,7 @@ export class GitHubService {
   async getRepositoryLabels(): Promise<GitHubLabel[]> {
     try {
       const output = await this.runGhCommand(
-        `label list --repo ${this.owner}/${this.repo} --json name,color,description,id`
+        `label list --repo ${this.owner}/${this.repo} --json name,color,description,id`,
       );
       return JSON.parse(output);
     } catch (error) {

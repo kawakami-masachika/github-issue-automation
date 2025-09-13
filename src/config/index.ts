@@ -3,29 +3,34 @@ import * as path from 'path';
 
 dotenv.config();
 
-export type  Config = {
+export type Config = {
   googleSheetId: string;
   githubToken?: string;
   githubRepoOwner: string;
   githubRepoName: string;
   sheetRange?: string;
-}
+};
 
 export function loadConfig(): Config {
   const requiredEnvVars = [
     'GOOGLE_SHEET_ID',
     'GITHUB_REPO_OWNER',
-    'GITHUB_REPO_NAME'
+    'GITHUB_REPO_NAME',
   ];
 
-  const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
+  const missingVars = requiredEnvVars.filter(
+    (varName) => !process.env[varName],
+  );
 
   if (missingVars.length > 0) {
-    throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
+    throw new Error(
+      `Missing required environment variables: ${missingVars.join(', ')}`,
+    );
   }
 
   // Google認証の設定をログ出力（デバッグ用）
-  const hasServiceAccountEnv = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY;
+  const hasServiceAccountEnv =
+    process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY;
   const hasServiceAccountKey = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
   const hasCredentialsPath = process.env.GOOGLE_CREDENTIALS_PATH;
 

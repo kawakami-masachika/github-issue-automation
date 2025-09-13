@@ -1,4 +1,4 @@
-export type  IssueData = {
+export type IssueData = {
   title: string;
   labels?: string[];
   overview?: string;
@@ -8,9 +8,9 @@ export type  IssueData = {
   acceptanceCriteria?: string;
   notes?: string;
   outOfScope?: string;
-}
+};
 
-export type  CSVRow = {
+export type CSVRow = {
   title: string;
   labels?: string;
   overview?: string;
@@ -20,11 +20,11 @@ export type  CSVRow = {
   acceptanceCriteria?: string;
   notes?: string;
   outOfScope?: string;
-}
+};
 
-export type  GitHubLabel = {
+export type GitHubLabel = {
   id: number;
   name: string;
   color: string;
   description?: string;
-}
+};

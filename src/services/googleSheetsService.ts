@@ -20,26 +20,41 @@ export class GoogleSheetsService {
       let credentials = null;
 
       // 方法1: 環境変数でのサービスアカウント認証
-      if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
+      if (
+        process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL &&
+        process.env.GOOGLE_PRIVATE_KEY
+      ) {
         credentials = {
           client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
           private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
         };
-        console.log('✅ Using service account credentials from environment variables');
+        console.log(
+          '✅ Using service account credentials from environment variables',
+        );
       }
       // 方法2: Base64エンコードされたサービスアカウントキー
       else if (process.env.GOOGLE_SERVICE_ACCOUNT_KEY) {
-        const decodedKey = Buffer.from(process.env.GOOGLE_SERVICE_ACCOUNT_KEY, 'base64').toString('utf-8');
+        const decodedKey = Buffer.from(
+          process.env.GOOGLE_SERVICE_ACCOUNT_KEY,
+          'base64',
+        ).toString('utf-8');
         credentials = JSON.parse(decodedKey);
         console.log('✅ Using Base64 encoded service account key');
       }
       // 方法3: サービスアカウントキーファイル
       else if (process.env.GOOGLE_CREDENTIALS_PATH) {
         if (fs.existsSync(process.env.GOOGLE_CREDENTIALS_PATH)) {
-          credentials = JSON.parse(fs.readFileSync(process.env.GOOGLE_CREDENTIALS_PATH, 'utf8'));
-          console.log('✅ Using service account key file:', process.env.GOOGLE_CREDENTIALS_PATH);
+          credentials = JSON.parse(
+            fs.readFileSync(process.env.GOOGLE_CREDENTIALS_PATH, 'utf8'),
+          );
+          console.log(
+            '✅ Using service account key file:',
+            process.env.GOOGLE_CREDENTIALS_PATH,
+          );
         } else {
-          throw new Error(`Credentials file not found: ${process.env.GOOGLE_CREDENTIALS_PATH}`);
+          throw new Error(
+            `Credentials file not found: ${process.env.GOOGLE_CREDENTIALS_PATH}`,
+          );
         }
       }
       // 方法4: デフォルトのcredentials.jsonファイル（後方互換性）
@@ -49,7 +64,9 @@ export class GoogleSheetsService {
       }
       // 方法5: Application Default Credentials (ADC)
       else {
-        console.log('✅ Attempting to use Application Default Credentials (ADC)');
+        console.log(
+          '✅ Attempting to use Application Default Credentials (ADC)',
+        );
       }
 
       if (credentials) {
@@ -61,7 +78,9 @@ export class GoogleSheetsService {
         // サービスアカウント情報を表示
         if (credentials.client_email) {
           console.log(`📧 Service Account Email: ${credentials.client_email}`);
-          console.log('⚠️  このメールアドレスをGoogle Sheetsの共有設定に追加してください');
+          console.log(
+            '⚠️  このメールアドレスをGoogle Sheetsの共有設定に追加してください',
+          );
         }
       } else {
         // ADCを使用
@@ -76,10 +95,10 @@ export class GoogleSheetsService {
       console.error('Google Sheets authentication failed:', error);
       throw new Error(
         'Google Sheets authentication failed. Please check your credentials and ensure you have:\n' +
-        '1. Set GOOGLE_SERVICE_ACCOUNT_EMAIL + GOOGLE_PRIVATE_KEY, or\n' +
-        '2. Set GOOGLE_SERVICE_ACCOUNT_KEY (Base64 encoded), or\n' +
-        '3. Set GOOGLE_CREDENTIALS_PATH pointing to a valid credentials file, or\n' +
-        '4. Configured Application Default Credentials (ADC)'
+          '1. Set GOOGLE_SERVICE_ACCOUNT_EMAIL + GOOGLE_PRIVATE_KEY, or\n' +
+          '2. Set GOOGLE_SERVICE_ACCOUNT_KEY (Base64 encoded), or\n' +
+          '3. Set GOOGLE_CREDENTIALS_PATH pointing to a valid credentials file, or\n' +
+          '4. Configured Application Default Credentials (ADC)',
       );
     }
   }
@@ -94,11 +113,11 @@ export class GoogleSheetsService {
 
       // 複数の範囲指定パターンを試す
       const rangesToTry = [
-        range,                    // 指定された範囲
-        'A:I',                   // シンプルな範囲
-        'Sheet1!A:I',            // Sheet1指定
-        'A1:I1000',              // 具体的な範囲
-        'Sheet1!A1:I1000'        // Sheet1で具体的な範囲
+        range, // 指定された範囲
+        'A:I', // シンプルな範囲
+        'Sheet1!A:I', // Sheet1指定
+        'A1:I1000', // 具体的な範囲
+        'Sheet1!A1:I1000', // Sheet1で具体的な範囲
       ];
 
       let response;
@@ -161,7 +180,7 @@ export class GoogleSheetsService {
       return data;
     } catch (error: any) {
       console.error('Error fetching data from Google Sheets:', error);
-      
+
       // 権限エラーの場合の詳細説明
       if (error.status === 403 || error.code === 403) {
         console.error('\n🚨 Google Sheets アクセス権限エラーが発生しました:');
@@ -170,15 +189,21 @@ export class GoogleSheetsService {
         console.error('2. 右上の「共有」ボタンをクリック');
         console.error('3. サービスアカウントのメールアドレスを追加');
         console.error('4. 権限を「閲覧者」または「編集者」に設定');
-        console.error('\nサービスアカウントのメールアドレスは credentials.json の client_email フィールドで確認できます。');
-        
+        console.error(
+          '\nサービスアカウントのメールアドレスは credentials.json の client_email フィールドで確認できます。',
+        );
+
         if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL) {
-          console.error(`\n📧 使用中のサービスアカウント: ${process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL}`);
+          console.error(
+            `\n📧 使用中のサービスアカウント: ${process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL}`,
+          );
         }
-        
-        throw new Error(`Google Sheets access denied. Please share the spreadsheet (${sheetId}) with your service account.`);
+
+        throw new Error(
+          `Google Sheets access denied. Please share the spreadsheet (${sheetId}) with your service account.`,
+        );
       }
-      
+
       throw error;
     }
   }
@@ -192,11 +217,13 @@ export class GoogleSheetsService {
       // シンプルなメタデータ取得でアクセス権限をテスト
       const response = await this.sheets.spreadsheets.get({
         spreadsheetId: sheetId,
-        fields: 'properties.title,sheets.properties.title'
+        fields: 'properties.title,sheets.properties.title',
       });
 
       if (response.data.properties?.title) {
-        console.log(`✅ スプレッドシート「${response.data.properties.title}」にアクセス可能です`);
+        console.log(
+          `✅ スプレッドシート「${response.data.properties.title}」にアクセス可能です`,
+        );
 
         // シート名を表示
         if (response.data.sheets && response.data.sheets.length > 0) {

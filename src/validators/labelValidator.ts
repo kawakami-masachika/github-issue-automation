@@ -5,7 +5,7 @@ export class LabelValidator {
 
   constructor(labels: GitHubLabel[]) {
     this.repositoryLabels = new Map();
-    labels.forEach(label => {
+    labels.forEach((label) => {
       this.repositoryLabels.set(label.name.toLowerCase(), label);
     });
   }
@@ -14,7 +14,7 @@ export class LabelValidator {
     const validLabels: string[] = [];
     const invalidLabels: string[] = [];
 
-    labels.forEach(label => {
+    labels.forEach((label) => {
       const trimmedLabel = label.trim();
       if (this.repositoryLabels.has(trimmedLabel.toLowerCase())) {
         validLabels.push(trimmedLabel);
@@ -35,8 +35,8 @@ export class LabelValidator {
   }
 }
 
-export type  ValidationResult = {
+export type ValidationResult = {
   isValid: boolean;
   validLabels: string[];
   invalidLabels: string[];
-}
+};

@@ -7,8 +7,8 @@ export function parseLabels(labelsString: string): string[] {
 
   return labelsString
     .split(',')
-    .map(label => label.trim())
-    .filter(label => label.length > 0);
+    .map((label) => label.trim())
+    .filter((label) => label.length > 0);
 }
 
 export function csvRowToIssueData(csvRow: CSVRow): IssueData {
@@ -26,5 +26,5 @@ export function csvRowToIssueData(csvRow: CSVRow): IssueData {
 }
 
 export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
