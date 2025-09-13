@@ -13,13 +13,27 @@ async function main(): Promise<void> {
     console.log('✅ 設定を読み込みました');
 
     // サービスの初期化
-    const googleSheetsService = new GoogleSheetsService(config.googleCredentialsPath);
+    const googleSheetsService = new GoogleSheetsService();
     const githubService = new GitHubService(
       config.githubRepoOwner,
       config.githubRepoName,
       config.githubToken
     );
     console.log('✅ サービスを初期化しました');
+
+    // Google Sheetsの権限チェック
+    console.log('🔐 Google Sheetsアクセス権限をチェック中...');
+    const hasPermission = await googleSheetsService.checkPermissions(config.googleSheetId);
+
+    if (!hasPermission) {
+      console.error('\n❌ Google Sheetsへのアクセス権限がありません。');
+      console.error('以下の手順で権限を設定してください:\n');
+      console.error('1. Google Sheetsを開く: https://docs.google.com/spreadsheets/d/' + config.googleSheetId);
+      console.error('2. 右上の「共有」ボタンをクリック');
+      console.error('3. サービスアカウントのメールアドレスを追加');
+      console.error('4. 権限を「閲覧者」に設定\n');
+      return;
+    }
 
     // Google Sheetsからデータを取得
     console.log('📊 Google Sheetsからデータを取得中...');

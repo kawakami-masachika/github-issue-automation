@@ -127,9 +127,18 @@ yarn start
 yarn build
 ```
 
+### トラブルシューティング用診断スクリプト
+
+接続や権限の問題を診断するためのスクリプトを実行できます：
+
+```bash
+yarn troubleshoot
+```
+
 ## 注意事項
 
 - **事前にGitHub CLIでの認証が必要です**: `gh auth login`を実行してください
+- **Google Sheetsの共有設定が必要です**: サービスアカウントを「閲覧者」として追加してください
 - GitHub API制限を考慮し、各issue作成間に1秒の待機時間を設けています
 - 無効なラベルが指定された場合、警告を表示して有効なラベルのみを使用します
 - Titleが空の行はスキップされます
@@ -138,6 +147,22 @@ yarn build
 ```
 
 ## トラブルシューティング
+
+### Google Sheets権限エラー
+
+**エラー**: `The caller does not have permission`
+
+**解決方法**:
+1. Google Sheetsを開く: `https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID`
+2. 右上の「共有」ボタンをクリック
+3. サービスアカウントのメールアドレス（`GOOGLE_SERVICE_ACCOUNT_EMAIL`の値）を追加
+4. 権限を「閲覧者」に設定
+5. 「送信」をクリック
+
+**確認コマンド**:
+```bash
+yarn troubleshoot
+```
 
 ### GitHub認証エラー
 
