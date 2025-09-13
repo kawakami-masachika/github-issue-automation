@@ -11,7 +11,6 @@ export class GitHubService {
     private token?: string,
     private projectId?: string,
     private projectTitle?: string,
-    private projectStatus?: string,
   ) {}
 
   /**

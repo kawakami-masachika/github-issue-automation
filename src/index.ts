@@ -20,7 +20,6 @@ async function main(): Promise<void> {
       config.githubToken,
       config.githubProjectId,
       config.githubProjectTitle,
-      config.githubProjectStatus,
     );
 
     if (config.githubProjectId || config.githubProjectTitle) {
