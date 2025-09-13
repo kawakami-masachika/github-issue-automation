@@ -8,6 +8,9 @@ export type Config = {
   githubToken?: string;
   githubRepoOwner: string;
   githubRepoName: string;
+  githubProjectId?: string;
+  githubProjectTitle?: string;
+  githubProjectStatus?: string;
   sheetRange?: string;
 };
 
@@ -49,6 +52,9 @@ export function loadConfig(): Config {
     githubToken: process.env.GITHUB_TOKEN,
     githubRepoOwner: process.env.GITHUB_REPO_OWNER!,
     githubRepoName: process.env.GITHUB_REPO_NAME!,
+    githubProjectId: process.env.GITHUB_PROJECT_ID,
+    githubProjectTitle: process.env.GITHUB_PROJECT_TITLE,
+    githubProjectStatus: process.env.GITHUB_PROJECT_STATUS || 'issue',
     sheetRange: process.env.SHEET_RANGE || 'A:I',
   };
 }

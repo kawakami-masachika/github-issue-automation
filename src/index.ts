@@ -18,8 +18,32 @@ async function main(): Promise<void> {
       config.githubRepoOwner,
       config.githubRepoName,
       config.githubToken,
+      config.githubProjectId,
+      config.githubProjectTitle,
+      config.githubProjectStatus,
     );
+
+    if (config.githubProjectId || config.githubProjectTitle) {
+      const projectInfo = config.githubProjectTitle
+        ? `"${config.githubProjectTitle}"`
+        : config.githubProjectId;
+      console.log(`🏗️ プロジェクト ${projectInfo} への自動追加が有効です`);
+    }
+
     console.log('✅ サービスを初期化しました');
+
+    // プロジェクト機能の権限チェック
+    if (config.githubProjectId || config.githubProjectTitle) {
+      console.log('🔐 GitHub CLI のプロジェクト権限をチェック中...');
+      const hasProjectPermission =
+        await githubService.checkProjectPermissions();
+
+      if (!hasProjectPermission) {
+        console.warn(
+          '⚠️ プロジェクト機能は利用できませんが、Issue作成は継続します',
+        );
+      }
+    }
 
     // Google Sheetsの権限チェック
     console.log('🔐 Google Sheetsアクセス権限をチェック中...');

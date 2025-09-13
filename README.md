@@ -69,6 +69,27 @@ GITHUB_REPO_OWNER=your_github_username
 GITHUB_REPO_NAME=your_repository_name
 ```
 
+#### GitHub Project設定（オプション）
+
+作成したIssueを自動的にGitHub Projectに追加したい場合：
+
+```env
+# 方法1: プロジェクト名で指定（推奨）
+GITHUB_PROJECT_TITLE=vital-pjt
+
+# 方法2: プロジェクトIDで指定
+GITHUB_PROJECT_ID=PVT_kwHOAppHyM4BC8AM
+
+# オプション: 初期ステータス
+GITHUB_PROJECT_STATUS=Todo
+```
+
+プロジェクト情報の確認方法：
+
+```bash
+gh project list
+```
+
 #### Google認証設定（以下のいずれかを選択）
 
 **方法1: 環境変数でのサービスアカウント認証（推奨）**
@@ -90,9 +111,9 @@ GOOGLE_CREDENTIALS_PATH=path/to/credentials.json
 GOOGLE_SERVICE_ACCOUNT_KEY=base64_encoded_service_account_key
 ```
 
-````
+## [Google Spread Sheet](https://docs.google.com/spreadsheets/d/1jcYk8Dn_pTXBbsZz-NsFSG3sLKfaiXARE-ZlVjgC5mY/edit?gid=0#gid=0)の形式
 
-## Google Sheetsの形式
+````
 
 スプレッドシートは以下の列構成で作成してください：
 
